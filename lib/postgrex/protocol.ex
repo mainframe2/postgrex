@@ -616,9 +616,9 @@ defmodule Postgrex.Protocol do
     user = Keyword.fetch!(opts, :username)
     pass = Keyword.fetch!(opts, :password)
 
-    digest = :crypto.hash(:md5, [pass, user])
+    digest = :erlang.md5([pass, user])
     |> Base.encode16(case: :lower)
-    digest = :crypto.hash(:md5, [digest, salt])
+    digest = :erlang.md5([digest, salt])
     |> Base.encode16(case: :lower)
     auth_send(s, msg_password(pass: ["md5", digest]), status, buffer)
   end
